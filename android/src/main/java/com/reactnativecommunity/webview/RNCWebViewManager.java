@@ -245,15 +245,14 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
           }
         }
         else {
+          // request.addRequestHeader("User-Agent", userAgent);
+          // request.setTitle(fileName);
+          // request.setDescription(downloadMessage);
+          // request.allowScanningByMediaScanner();
+          // request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+          // request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+
           webView.loadUrl(JavaScriptInterface.getBase64StringFromBlobUrl(url));
-          webView.getSettings().setAppCachePath(getActivity().getApplicationContext().getCacheDir().getAbsolutePath());
-          webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-          webView.getSettings().setDatabaseEnabled(true);
-          webView.getSettings().setDomStorageEnabled(true);
-          webView.getSettings().setUseWideViewPort(true);
-          webView.getSettings().setLoadWithOverviewMode(true);
-          webView.addJavascriptInterface(new JavaScriptInterface(getContext()), "Android");
-          webView.getSettings().setPluginState(PluginState.ON);
         }
       }
     });
