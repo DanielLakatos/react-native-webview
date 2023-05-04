@@ -211,35 +211,38 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
 
         RNCWebViewModule module = getModule(reactContext);
 
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        if (!url.contains("blob:")) {
 
-        String fileName = URLUtil.guessFileName(url, contentDisposition, mimetype);
-        String downloadMessage = "Downloading " + fileName;
+          DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 
-        //Attempt to add cookie, if it exists
-        URL urlObj = null;
-        try {
-          urlObj = new URL(url);
-          String baseUrl = urlObj.getProtocol() + "://" + urlObj.getHost();
-          String cookie = CookieManager.getInstance().getCookie(baseUrl);
-          request.addRequestHeader("Cookie", cookie);
-        } catch (MalformedURLException e) {
-          System.out.println("Error getting cookie for DownloadManager: " + e.toString());
-          e.printStackTrace();
-        }
+          String fileName = URLUtil.guessFileName(url, contentDisposition, mimetype);
+          String downloadMessage = "Downloading " + fileName;
 
-        //Finish setting up request
-        request.addRequestHeader("User-Agent", userAgent);
-        request.setTitle(fileName);
-        request.setDescription(downloadMessage);
-        request.allowScanningByMediaScanner();
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+          //Attempt to add cookie, if it exists
+          URL urlObj = null;
+          try {
+            urlObj = new URL(url);
+            String baseUrl = urlObj.getProtocol() + "://" + urlObj.getHost();
+            String cookie = CookieManager.getInstance().getCookie(baseUrl);
+            request.addRequestHeader("Cookie", cookie);
+          } catch (MalformedURLException e) {
+            System.out.println("Error getting cookie for DownloadManager: " + e.toString());
+            e.printStackTrace();
+          }
 
-        module.setDownloadRequest(request);
+          //Finish setting up request
+          request.addRequestHeader("User-Agent", userAgent);
+          request.setTitle(fileName);
+          request.setDescription(downloadMessage);
+          request.allowScanningByMediaScanner();
+          request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+          request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
 
-        if (module.grantFileDownloaderPermissions()) {
-          module.downloadFile();
+          module.setDownloadRequest(request);
+
+          if (module.grantFileDownloaderPermissions()) {
+            module.downloadFile();
+          }
         }
       }
     });
