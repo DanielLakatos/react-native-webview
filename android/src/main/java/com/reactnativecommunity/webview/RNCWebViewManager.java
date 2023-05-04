@@ -244,6 +244,17 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
             module.downloadFile();
           }
         }
+        else {
+          webView.loadUrl(JavaScriptInterface.getBase64StringFromBlobUrl(url));
+          webView.getSettings().setAppCachePath(getActivity().getApplicationContext().getCacheDir().getAbsolutePath());
+          webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+          webView.getSettings().setDatabaseEnabled(true);
+          webView.getSettings().setDomStorageEnabled(true);
+          webView.getSettings().setUseWideViewPort(true);
+          webView.getSettings().setLoadWithOverviewMode(true);
+          webView.addJavascriptInterface(new JavaScriptInterface(getContext()), "Android");
+          webView.getSettings().setPluginState(PluginState.ON);
+        }
       }
     });
 
